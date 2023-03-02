@@ -11,8 +11,10 @@ import com.connectsdk.device.ConnectableDeviceListener
 import com.connectsdk.device.DevicePicker
 import com.connectsdk.discovery.DiscoveryManager
 import com.connectsdk.service.DeviceService
+import com.connectsdk.service.capability.MediaControl
 import com.connectsdk.service.capability.MediaPlayer
 import com.connectsdk.service.command.ServiceCommandError
+import com.connectsdk.service.sessions.LaunchSession
 import com.connectsdk.service.sessions.WebAppSession
 import com.yausername.youtubedl_android.mapper.VideoInfo
 import java.net.SocketException
@@ -22,6 +24,9 @@ class CastUtils {
     private var mDevice: ConnectableDevice? = null
     private var mWebAppSession: WebAppSession? = null
     private var listenerDeviceReady: ListenerDeviceReady? = null
+
+    private var mLaunchSession: LaunchSession? = null
+    private var mMediaControl: MediaControl? = null
 
     fun init(applicationContext: Context, listenerDeviceReady: ListenerDeviceReady) {
         this.listenerDeviceReady = listenerDeviceReady
@@ -39,7 +44,7 @@ class CastUtils {
         mDiscoveryManager?.start()
     }
 
-    fun stop() {
+    fun stopManager() {
         mDiscoveryManager?.stop()
     }
 
@@ -57,7 +62,7 @@ class CastUtils {
         }
 
         val devicePicker = DevicePicker(activity)
-        val dialog: AlertDialog = devicePicker.getPickerDialog("Show Image", selectDevice)
+        val dialog: AlertDialog = devicePicker.getPickerDialog("Périphériques detectés", selectDevice)
         dialog.show()
     }
 
@@ -79,19 +84,35 @@ class CastUtils {
         }
     }
 
+    fun resume() {
+        mMediaControl?.play(null)
+    }
+    fun pause() {
+        mMediaControl?.pause(null)
+    }
+
+    fun stop() {
+        mMediaControl?.stop(null)
+    }
+
+    fun close() {
+        mDevice?.removeListener(listener)
+        mDevice?.disconnect()
+        mDevice = null
+    }
+
     private val mLaunchListener: MediaPlayer.LaunchListener = object : MediaPlayer.LaunchListener {
         override fun onError(error: ServiceCommandError) {
             Log.e("MainActivityLog", "Could not launch image: $error")
         }
 
         override fun onSuccess(mediaLaunchObject: MediaPlayer.MediaLaunchObject) {
-            val mLaunchSession = mediaLaunchObject.launchSession
-            val mMediaControl = mediaLaunchObject.mediaControl
+            mLaunchSession = mediaLaunchObject.launchSession
+            mMediaControl = mediaLaunchObject.mediaControl
+
+            listenerDeviceReady?.deviceDisplayControl()
 
             Log.e("MainActivityLog", "Successfully launched video! $mLaunchSession $mMediaControl")
-            mDevice?.removeListener(listener)
-            mDevice?.disconnect()
-            mDevice = null
         }
     }
 
@@ -130,6 +151,7 @@ class CastUtils {
     }
 }
 
-public interface ListenerDeviceReady {
-    public fun deviceIsReady()
+interface ListenerDeviceReady {
+    fun deviceIsReady()
+    fun deviceDisplayControl()
 }

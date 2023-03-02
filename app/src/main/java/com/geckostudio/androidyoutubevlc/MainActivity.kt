@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var player: Player? = null
     private var cast: CastUtils? = null
+    private var isPause = false
 
     private val repository: MainActivityRepository by lazy {
         MainActivityRepository()
@@ -50,9 +51,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.videoInfoLiveData.observeForever {
             HUDUtils.dismissDialog()
             if(it != null) {
-                binding.copybtn.visibility = View.VISIBLE
-                binding.playTvBtn.visibility = View.VISIBLE
-                binding.castBtn.visibility = View.VISIBLE
+                binding.layoutBtnStream.visibility = View.VISIBLE
             } else {
                 Toast.makeText(this, "Une erreur est survenue", Toast.LENGTH_SHORT).show()
             }
@@ -86,6 +85,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.playTvBtn.setOnClickListener {
+            cast?.play(viewModel.videoInfoLiveData.value)
+        }
+
+        binding.playVLCBtn.setOnClickListener {
             val videoInfo = viewModel.videoInfoLiveData.value
             if(videoInfo?.url != null) {
                 player?.sendToVlc(this, videoInfo.url, videoInfo.title)
@@ -96,6 +99,29 @@ class MainActivity : AppCompatActivity() {
 
         binding.castBtn.setOnClickListener {
             cast?.displayCastMenu(this)
+        }
+
+
+
+        binding.playPause.setOnClickListener {
+            if(isPause) {
+                binding.playPause.setImageResource(R.drawable.ic_pause)
+                cast?.resume()
+            } else {
+                binding.playPause.setImageResource(R.drawable.ic_play)
+                cast?.pause()
+            }
+            isPause = !isPause
+        }
+
+        binding.stop.setOnClickListener {
+            cast?.stop()
+        }
+
+        binding.close.setOnClickListener {
+            cast?.close()
+            cast?.stop()
+            finish()
         }
     }
 
@@ -120,7 +146,13 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         cast?.init(applicationContext, object: ListenerDeviceReady {
             override fun deviceIsReady() {
+                binding.layoutBtnStream.visibility = View.VISIBLE
+                binding.playTvBtn.visibility = View.VISIBLE
                 cast?.play(viewModel.videoInfoLiveData.value)
+            }
+
+            override fun deviceDisplayControl() {
+                binding.layoutBtnTV.visibility = View.VISIBLE
             }
         })
     }
@@ -132,7 +164,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        cast?.stop()
+        cast?.stopManager()
     }
 
 }
