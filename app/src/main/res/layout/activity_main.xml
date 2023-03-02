@@ -7,20 +7,15 @@
     tools:context=".MainActivity"
     android:background="@color/black">
 
-    <FrameLayout android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/rootVlc"
-        android:background="@android:color/black"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/launchTV"
+        android:src="@drawable/ic_tv"
+        app:tint="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <org.videolan.libvlc.util.VLCVideoLayout
-            android:id="@+id/view_vlc_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </FrameLayout>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -29,7 +24,8 @@
         android:hint="Lien Youtube"
         android:textColor="@color/black"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/rootVlc"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/launchTV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -52,16 +48,16 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/playBtn"
-            android:src="@drawable/ic_play"
+            android:id="@+id/playTvBtn"
+            android:src="@drawable/ic_play_tv"
             android:visibility="gone"
             app:tint="@color/white"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/playTvBtn"
-            android:src="@drawable/ic_play_tv"
+            android:id="@+id/castBtn"
+            android:src="@drawable/ic_cast"
             android:visibility="gone"
             app:tint="@color/white"/>
     </LinearLayout>

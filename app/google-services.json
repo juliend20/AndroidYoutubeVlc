@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "777829071852",
+    "firebase_url": "https://home-322b9.firebaseio.com",
+    "project_id": "home-322b9",
+    "storage_bucket": "home-322b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777829071852:android:206c8d0e34f6fc2f211ec9",
+        "android_client_info": {
+          "package_name": "com.geckostudio.androidyoutubevlc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777829071852-m13745gt4ufa32401q2fpo4aflol2igp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz9jve-WW5g6YHiYRfQHtrBUBrfKxv3fk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777829071852-bvujc6flmdhjjs03eugm00daeq9pvs2f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
