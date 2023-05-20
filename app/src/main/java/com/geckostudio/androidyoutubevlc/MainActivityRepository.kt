@@ -1,17 +1,16 @@
 package com.geckostudio.androidyoutubevlc
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.yausername.youtubedl_android.mapper.VideoInfo
 
 class MainActivityRepository {
-    val videoInfoLiveData: MutableLiveData<VideoInfo> by lazy {
-        MutableLiveData<VideoInfo>()
-    }
 
-    fun getStreamingUrl(url: String?) {
+    fun getStreamingUrl(url: String?): VideoInfoExtra? {
+        Log.e("MainActivity", "getStreamingUrl: $url")
         if(url != null) {
-            val videoInfo = YoutubeDLUtils.extractVideoInfo(url)
-            videoInfoLiveData.postValue(videoInfo?.videoInfo)
-        } else videoInfoLiveData.postValue(null)
+            return YoutubeDLUtils.extractVideoInfo(url)
+        }
+        return null
     }
 }

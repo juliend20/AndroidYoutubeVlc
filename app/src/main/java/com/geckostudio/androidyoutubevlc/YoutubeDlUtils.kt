@@ -61,42 +61,6 @@ object YoutubeDLUtils {
 
         return null
     }
-
-    fun updateYoutubeDL(context: Context?) {
-        if (updating) {
-            Toast.makeText(context, "update is already in progress", Toast.LENGTH_LONG)
-                .show()
-            return
-        }
-        updating = true
-        val disposable: Disposable = Observable.fromCallable {
-            YoutubeDL.getInstance().updateYoutubeDL(context)
-        }
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ status ->
-                when (status) {
-                    YoutubeDL.UpdateStatus.DONE -> Toast.makeText(
-                        context,
-                        "La mise à jour a été effectuée avec succès",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    YoutubeDL.UpdateStatus.ALREADY_UP_TO_DATE -> Toast.makeText(
-                        context,
-                        "La librairie est déjà à jour.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    else -> Toast.makeText(context, status.toString(), Toast.LENGTH_LONG)
-                        .show()
-                }
-                updating = false
-            }) {
-                // progressBar.setVisibility(View.GONE)
-                Toast.makeText(context, "Mise à jour échoué", Toast.LENGTH_LONG).show()
-                updating = false
-            }
-        compositeDisposable.add(disposable)
-    }
 }
 
 data class VideoInfoExtra(val videoInfo: VideoInfo?, val error: String? = null)

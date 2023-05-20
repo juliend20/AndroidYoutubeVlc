@@ -4,12 +4,15 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.android.volley.Request
 import com.android.volley.RequestTask
 import com.android.volley.Response
@@ -48,12 +51,21 @@ class MainActivity : AppCompatActivity() {
         // Cast
         cast = CastUtils()
 
-        viewModel.videoInfoLiveData.observeForever {
-            HUDUtils.dismissDialog()
+        viewModel.videoInfoLiveData.observe(this) {
             if(it != null) {
+                binding.streamingUrl.setText(it.url)
+                binding.streamingLink.visibility = View.VISIBLE
                 binding.layoutBtnStream.visibility = View.VISIBLE
             } else {
                 Toast.makeText(this, "Une erreur est survenue", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.displayHud.observe(this) {
+            if(it) {
+                HUDUtils.showDialog(this, "Chargement...")
+            } else {
+                HUDUtils.dismissDialog()
             }
         }
 
@@ -73,15 +85,21 @@ class MainActivity : AppCompatActivity() {
             queue.add(stringRequest)
         }
         binding.urlOfYoutube.addTextChangedListener {
-            HUDUtils.showDialog(this, "Chargement...")
             viewModel.getStreamingUrl(it.toString())
         }
 
         binding.copybtn.setOnClickListener {
             val clipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("StreamingUrl", viewModel.videoInfoLiveData.value?.url)
+            val clip = ClipData.newPlainText("YoutubeUrl", binding.urlOfYoutube.toString())
             clipboard.setPrimaryClip(clip)
-            Toast.makeText(this, "Le lien a été copié", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Le lien youtube a été copié", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.copyStreamingbtn.setOnClickListener {
+            val clipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("StreamingUrl", binding.streamingUrl.text)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(this, "Le lien streaming a été copié", Toast.LENGTH_SHORT).show()
         }
 
         binding.playTvBtn.setOnClickListener {
@@ -90,8 +108,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.playVLCBtn.setOnClickListener {
             val videoInfo = viewModel.videoInfoLiveData.value
-            if(videoInfo?.url != null) {
-                player?.sendToVlc(this, videoInfo.url, videoInfo.title)
+            val url = videoInfo?.url
+            val title = videoInfo?.title
+            if(url != null && title != null) {
+                player?.sendToVlc(this, url, title)
             } else {
                 Toast.makeText(this, "Une erreur est survenue", Toast.LENGTH_SHORT).show()
             }
@@ -100,8 +120,6 @@ class MainActivity : AppCompatActivity() {
         binding.castBtn.setOnClickListener {
             cast?.displayCastMenu(this)
         }
-
-
 
         binding.playPause.setOnClickListener {
             if(isPause) {
@@ -131,9 +149,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun manageShareData(intent: Intent?) {
+        Log.e("MainActivity", intent.toString())
         if(intent?.action == Intent.ACTION_SEND && "text/plain" == intent.type) {
             intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
                 binding.urlOfYoutube.setText(it)
+                viewModel.getStreamingUrl(it)
             }
         }
     }
@@ -166,5 +186,4 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         cast?.stopManager()
     }
-
 }

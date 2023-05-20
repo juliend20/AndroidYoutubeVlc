@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "777829071852",
-    "firebase_url": "https://home-322b9.firebaseio.com",
-    "project_id": "home-322b9",
-    "storage_bucket": "home-322b9.appspot.com"
+    "project_number": "1088972146521",
+    "project_id": "videoontv",
+    "storage_bucket": "videoontv.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:777829071852:android:206c8d0e34f6fc2f211ec9",
+        "mobilesdk_app_id": "1:1088972146521:android:c078a2ba2f4f6c8b35ee48",
         "android_client_info": {
           "package_name": "com.geckostudio.androidyoutubevlc"
         }
       },
       "oauth_client": [
         {
-          "client_id": "777829071852-m13745gt4ufa32401q2fpo4aflol2igp.apps.googleusercontent.com",
+          "client_id": "1088972146521-1hhrfba9h7pg90617bfvqoa6a85t4ds8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.geckostudio.androidyoutubevlc",
+            "certificate_hash": "d86ac83d251f128f399053786c592b0aa16dc251"
+          }
+        },
+        {
+          "client_id": "1088972146521-2io4likq8jnjanpfbsujaquomrgadigm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAz9jve-WW5g6YHiYRfQHtrBUBrfKxv3fk"
+          "current_key": "AIzaSyAtoRQa_iH9mMUawVtYtQvuMIuDYwQG1QM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "777829071852-bvujc6flmdhjjs03eugm00daeq9pvs2f.apps.googleusercontent.com",
+              "client_id": "1088972146521-2io4likq8jnjanpfbsujaquomrgadigm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

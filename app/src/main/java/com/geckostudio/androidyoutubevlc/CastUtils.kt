@@ -74,13 +74,15 @@ class CastUtils {
             val description = videoInfo.description
             val mimeType = "video/mp4"
 
-            val mediaInfo = MediaInfo.Builder(mediaURL, mimeType)
-                .setTitle(title)
-                .setDescription(description)
-                .setIcon(iconURL)
-                .build()
+            if(mediaURL != null && iconURL != null && title != null && description != null) {
+                val mediaInfo = MediaInfo.Builder(mediaURL, mimeType)
+                    .setTitle(title)
+                    .setDescription(description)
+                    .setIcon(iconURL)
+                    .build()
 
-            mDevice?.mediaPlayer?.playMedia(mediaInfo, false, mLaunchListener)
+                mDevice?.mediaPlayer?.playMedia(mediaInfo, false, mLaunchListener)
+            }
         }
     }
 
