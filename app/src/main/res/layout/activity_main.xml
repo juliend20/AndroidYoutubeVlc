@@ -10,11 +10,32 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/castBtn"
+        android:src="@drawable/ic_cast"
+        android:layout_margin="10dp"
+        app:tint="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/launchTV"
         android:src="@drawable/ic_tv"
+        android:layout_margin="10dp"
         app:tint="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/UpdateYoutubeDl"
+        android:src="@drawable/upgrade_icon"
+        android:layout_margin="10dp"
+        app:tint="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <LinearLayout
@@ -22,6 +43,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/layoutLink"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@id/launchTV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/layoutBtnStream"
+        android:id="@+id/layoutBtnTV"
         android:visibility="gone"
         tools:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/layoutLink"
@@ -59,40 +81,12 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:id="@+id/playVLCBtn"
-            android:src="@drawable/ic_vlc"
-            android:layout_margin="15dp"/>
-
-        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/playTvBtn"
-            android:src="@drawable/ic_play_tv"
-            android:visibility="gone"
+            android:id="@+id/rewind"
+            android:src="@drawable/ic_rewind"
             android:layout_margin="15dp"
-            app:tint="@color/white"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/castBtn"
-            android:src="@drawable/ic_cast"
-            android:layout_margin="15dp"
-            app:tint="@color/white"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/layoutBtnTV"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/layoutBtnStream"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+            app:tint="@color/white" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -117,40 +111,25 @@
             android:src="@drawable/ic_close"
             android:layout_margin="15dp"
             app:tint="@color/white"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/forward"
+            android:src="@drawable/ic_forward"
+            android:layout_margin="15dp"
+            app:tint="@color/white" />
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/streamingLink"
-        android:visibility="gone"
-        tools:visibility="visible"
+        android:layout_height="0dp"
+        android:id="@+id/recycler_view"
+        app:layout_constraintVertical_bias="1"
         app:layout_constraintTop_toBottomOf="@id/layoutBtnTV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:weightSum="2"
-        app:layout_constraintVertical_bias="1">
+        android:weightSum="2"/>
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/streamingUrl"
-            android:layout_weight="1.9"
-            android:lines="2"
-            android:hint="Lien Youtube"
-            android:textColor="@color/black"
-            android:background="@color/white"
-            android:layout_margin="10dp"/>
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_weight="0.1"
-            android:id="@+id/copyStreamingbtn"
-            android:src="@drawable/ic_copy"
-            app:tint="@color/white" />
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -97,6 +97,14 @@ class CastUtils {
         mMediaControl?.stop(null)
     }
 
+    fun forward() {
+        mMediaControl?.fastForward(null)
+    }
+
+    fun rewind() {
+        mMediaControl?.rewind(null)
+    }
+
     fun close() {
         mDevice?.removeListener(listener)
         mDevice?.disconnect()
@@ -106,6 +114,7 @@ class CastUtils {
     private val mLaunchListener: MediaPlayer.LaunchListener = object : MediaPlayer.LaunchListener {
         override fun onError(error: ServiceCommandError) {
             Log.e("MainActivityLog", "Could not launch image: $error")
+            listenerDeviceReady?.launchError(error.toString())
         }
 
         override fun onSuccess(mediaLaunchObject: MediaPlayer.MediaLaunchObject) {
@@ -129,6 +138,7 @@ class CastUtils {
 
         override fun onDeviceDisconnected(device: ConnectableDevice?) {
             Log.e("MainActivityLog", "onDeviceDisconnected $device")
+            listenerDeviceReady?.deviceIsDisconnected()
         }
 
         override fun onPairingRequired(
@@ -156,4 +166,6 @@ class CastUtils {
 interface ListenerDeviceReady {
     fun deviceIsReady()
     fun deviceDisplayControl()
+    fun deviceIsDisconnected()
+    fun launchError(message: String)
 }

@@ -6,15 +6,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(private val repository: MainActivityRepository) : ViewModel() {
-    val videoInfoLiveData: MutableLiveData<VideoInfo> by lazy {
-        MutableLiveData<VideoInfo>()
+    private var _videoInfos: MutableList<VideoInfoExtra> = mutableListOf()
+    val videoInfosLiveData: MutableLiveData<List<VideoInfoExtra>> by lazy {
+        MutableLiveData<List<VideoInfoExtra>>()
     }
 
     val displayHud: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
 
-    var streamingUrl: String? = null
+    private var streamingUrl: String? = null
 
     fun getStreamingUrl(url: String?) = apply {
         if(streamingUrl == url) {
@@ -23,8 +24,13 @@ class MainActivityViewModel(private val repository: MainActivityRepository) : Vi
         streamingUrl = url
         displayHud.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val videoInfo = repository.getStreamingUrl(url)
-            videoInfoLiveData.postValue(videoInfo?.videoInfo)
+            repository.getStreamingUrl(url)?.let {
+                if(it.error != null) {
+                    return@let
+                }
+                _videoInfos.add(it)
+                videoInfosLiveData.postValue(_videoInfos)
+            }
             displayHud.postValue(false)
         }
     }

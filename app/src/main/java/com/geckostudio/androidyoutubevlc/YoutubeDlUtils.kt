@@ -34,7 +34,7 @@ object YoutubeDLUtils {
         if(url.isEmpty()) return null
 
         Log.e("Utils", "extractVideoInfo URL $url")
-
+        var error: String? = null
         repeat(2) {
             val request = YoutubeDLRequest(url)
             request.addOption("-f", "best")
@@ -55,11 +55,35 @@ object YoutubeDLUtils {
                 return VideoInfoExtra(null, error)
             } catch (e: Exception) {
                 Log.e("Utils", "failed to extractVideoInfo", e)
+                if(e.message?.contains("playlist exist?") == true) {
+                    error = "Une erreur est survenue dans l'extraction de la vidéo. (Playlist?)"
+                } else {
+                    error = "Une erreur est survenue dans l'extraction de la vidéo"
+                }
             }
             Thread.sleep(50)
         }
 
-        return null
+        return VideoInfoExtra(null, error)
+    }
+
+    fun updateYoutubeDL(context: Context) {
+        if(updating) return
+        updating = true
+        compositeDisposable.add(
+            Observable.fromCallable {
+                YoutubeDL.getInstance().updateYoutubeDL(context)
+            }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Toast.makeText(context, "Youtube-dl mis à jour", Toast.LENGTH_SHORT).show()
+                    updating = false
+                }, {
+                    Toast.makeText(context, "Erreur lors de la mise à jour de youtube-dl", Toast.LENGTH_SHORT).show()
+                    updating = false
+                })
+        )
     }
 }
 
